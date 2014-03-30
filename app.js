@@ -1,9 +1,13 @@
 /*
 Comalbum - a cooperative shopping list
 by Kenneth Dammyr, 2014
+
+app.js
 */
 
 var express = require("express");
+var db = require("./db.js");
+
 var app = express();
 
 // simple logger
@@ -13,23 +17,25 @@ app.use(function(req, res, next){
 });
 app.use(express.json()); 
 
-var shopitems = {
-	1:'Brød',
-	2:'Smør',
-	3:'Melk',
-	4:'Appelsinjuice',
-	5:'Mango',
-	6:'Bananer',
-	7:'Pepper'
-}
-
-app.get('/api/shopitems', function(req, res) {
-	res.json(shopitems);
+app.get('/api/shop/list', function(req, res) {
+	db.shoplist(function(shopitems){
+		res.json(shopitems);
+		console.log("Got back: ", shopitems);
+	});
 });
 
-app.post('/api/shopadd', function(req, res) {
-	console.log("Det skjedde noe", req);
-	res.send('Username: ' + req.body.shopitem);
+app.post('/api/shop/', function(req, res) {
+	db.shopadd(req.body, function(response){
+		console.log("We added: ", response);
+		res.json(response);
+	});
+});
+
+app.delete('/api/shop/:id', function(req, res) {
+	db.shopdelete(req.params.id, function(response){
+		console.log("We deleted: ", response);
+		res.send("We deleted: ", response);
+	});;
 });
 
 var port = Number(process.env.PORT || 5000);
