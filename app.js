@@ -28,9 +28,8 @@ app.get('/api/shopitems', function(req, res) {
 });
 
 app.post('/api/shopadd', function(req, res) {
-	console.log("Det skjedde noe");
-    var shopitem = req.body.name,
-        color = req.body.color;
+	console.log("Det skjedde noe", req);
+	res.send('Username: ' + req.body.shopitem);
 });
 
 var port = Number(process.env.PORT || 5000);
