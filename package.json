@@ -1,0 +1,29 @@
+{
+  "name": "Comalbum",
+  "description": "A cooperative shopping list",
+  "version": "0.1",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kennethdammyr/comalbum.git"
+  },
+  "maintainers": [
+    {
+      "name": "kennethdammyr@gmail.com",
+      "email": "kennethdammyr@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "express": "3.5.x",
+	"logfmt": "1.1.x"
+  },
+  "licenses": [
+    {
+      "name": "MIT-licence",
+      "url": "http://en.wikipedia.org/wiki/MIT_License"
+    }
+  ],
+  "engines": {
+    "node": "0.10.x"
+  }
+}
