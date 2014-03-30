@@ -20,7 +20,7 @@ app.use(express.json());
 app.get('/api/shop/list', function(req, res) {
 	db.shoplist(function(shopitems){
 		res.json(shopitems);
-		console.log("Got back: ", shopitems);
+		console.log("We have: ", shopitems);
 	});
 });
 
@@ -34,7 +34,7 @@ app.post('/api/shop/', function(req, res) {
 app.delete('/api/shop/:id', function(req, res) {
 	db.shopdelete(req.params.id, function(response){
 		console.log("We deleted: ", response);
-		res.send("We deleted: ", response);
+		res.json(response);
 	});;
 });
 
