@@ -1,7 +1,6 @@
 {
   "name": "Comalbum",
   "description": "A cooperative shopping list",
-  "version": "0.1",
   "main": "app.js",
   "repository": {
     "type": "git",
@@ -14,8 +13,7 @@
     }
   ],
   "dependencies": {
-    "express": "3.5.x",
-	"logfmt": "1.1.x"
+    "express": "3.5.x"
   },
   "licenses": [
     {
