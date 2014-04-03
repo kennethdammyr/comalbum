@@ -35,7 +35,7 @@ var shopdelete = function(id, done){
 		db.collection('shopitems').findAndModify(
 		{'_id': o_id}, // query
 		[['_id','asc']],  // sort order
-		{$set: {shopped: 'true'}}, // replacement
+		{$set: {'shopped': 'true'}}, // replacement
 		{}, // options
 		function(err, object) {
 			if (err){
