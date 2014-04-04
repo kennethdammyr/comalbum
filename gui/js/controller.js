@@ -6,7 +6,7 @@
 function shoplist () {
 	this.list = function(done){
 		console.log("Vi lister din handleliste");
-		$.getJSON( "http://localhost:5000/api/shop/list", function( data ) {
+		$.getJSON( "http://comalbum.dammyr.net//api/shop/list", function( data ) {
 			var input = {"items": data}
 			$(".list-group").html(template(input));
 			  $.each( data, function( key, val ) {
@@ -29,7 +29,7 @@ function shoplist () {
 		$(".list-group").append(template(input));
 		done();
 		$.ajax({
-		  url: "http://localhost:5000/api/shop/",
+		  url: "http://comalbum.dammyr.net/api/shop/",
 		  contentType: "application/json",
 		  data: JSON.stringify(senddata),
 		  type: 'POST'
@@ -48,7 +48,7 @@ function shoplist () {
 		console.log("Vi sletter: ", shopitem);
 		
 		$.ajax({
-		  url: "http://localhost:5000/api/shop/"+shopitem.id,
+		  url: "http://comalbum.dammyr.net/api/shop/"+shopitem.id,
 		  type: 'DELETE'
 		}).done(function(response) {
 		  console.log(response[0]);	
