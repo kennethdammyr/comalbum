@@ -10,10 +10,18 @@ body {
   margin: 0 auto;
 }
 
+.input-group {
+	  
+}
+
 .striked {
 	text-decoration: line-through;
 }
 
+.row {
+	padding-bottom: 20px;
+	margin: 0 auto;
+}
 
 
 .list-group-item {
@@ -44,5 +52,5 @@ body {
 	vertical-align:middle;
 	color: #fff;
 	font-family: Helvetica Neue, Helvetica, Arial;
-	font-weight: 100;
+	font-weight: 300;
 }
