@@ -54,7 +54,7 @@ var shoplist = function(done){
 	MongoClient.connect(connectionString, function(err, db) { // Connect to dB
 	if(err) throw err;
 	
-		var collection = db.collection('shopitems').find({}); // Search dB
+		var collection = db.collection('shopitems').find({"shopped": "false"}); // Search dB
 		
 		collection.toArray(function(err, doc){
 			done(doc);	

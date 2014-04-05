@@ -4,7 +4,8 @@
   
 
 function shoplist () {
-	this.list = function(done){
+	// SHOW-METHOD
+	this.show = function(done){
 		console.log("Vi lister din handleliste");
 		$.getJSON( "http://comalbum.dammyr.net//api/shop/list", function( data ) {
 			var input = {"items": data}
@@ -17,6 +18,8 @@ function shoplist () {
 			});
 	}
 	
+	
+	// ADD-METHOD
 	this.add = function(item, done){
 		console.log("Vi legger til: ", item);
 			
@@ -41,20 +44,24 @@ function shoplist () {
 		});
 	}
 	
+	// REMOVE-METHOD
 	this.remove = function(item){
 		var shopitem = {};
-		shopitem.id = $(item).siblings(".shoplistitem").attr("data-id");
-		shopitem.name = $(item).siblings(".shoplistitem").text();
+		shopitem.name = $(item).attr("data-name");
+		shopitem.id = $(item).attr("data-id");
+		
+		
 		console.log("Vi sletter: ", shopitem);
 		
 		$.ajax({
 		  url: "http://comalbum.dammyr.net/api/shop/"+shopitem.id,
 		  type: 'DELETE'
 		}).done(function(response) {
-		  console.log(response[0]);	
+		  console.log(response);	
 		}).fail(function(err){
 			console.warn(err);	
 		});
+		
 	}
 	
 }
@@ -68,28 +75,16 @@ $('document').ready(function(){
 	
 	var mylist = new shoplist();
 	
-	
-	function shopdelete(el) {
-		$(el).siblings().addClass("striked");
-		mylist.remove(el);
-		function fadeout(){
-			$(el).fadeOut(1000);
-			$(el).parent().fadeOut(1000);
-		}
-		//setTimeout(function(){fadeout()}, 3000);
-	}
-	
-	
-	mylist.list(function(){
-		$('.del-button').click(function(){
-			shopdelete(this);		
-		});	
+	mylist.show(function(){
 		
-		$(".list-group").children().children(".shoplistitem").each(function(){
-			if($(this).attr("data-shopped") == "true"){
-				$(this).addClass("striked");	
-			}
+		var list = document.getElementById("list-group");
+		new SwipeOut(list);
+		
+		$(".list-group-item").on("delete", function(evt) {
+			console.log(this);
+  			mylist.remove(this);
 		});
+
 		
 	});
 	// Make new list
