@@ -5,6 +5,7 @@
 
 function shoplist () {
 	
+	var parentThis = this;
 	this.items;
 	this.owner = "Owner not yet implemented";
 	
@@ -12,49 +13,60 @@ function shoplist () {
 	this.show = function(done){
 		console.log("Vi lister din handleliste");
 		$("#shoplist").addClass("loading");
-		
+		/*
 		$.getJSON( "http://comalbum.dammyr.net//api/shop/list", function( data ) {
 			$("#shoplist").removeClass("loading");
 			var input = {"items": data}
 			$(".list-group").html(template(input));
-			  $.each( data, function( key, val ) {
-				items = val;
+			  var items = $.each( data, function( key, val ) {
+				return val;
 			  });
 			done();
-			
 			});
+		*/
+		parentThis.load(0,function(items){
+			$("#shoplist").removeClass("loading");
+			var input = {"items": items}
+			$(".list-group").html(template(input));
+			done();
+		})
 	}
 	
-	// RELOAD-METHOD
-	this.reload = function(done){
-		console.log("Vi reloader aktiv liste");	
+	// LOAD-METHOD
+	this.load = function(listID,done){
+		console.log("Vi loader liste");	
 		
-		
-		
-		//done();
+		$.getJSON( "http://comalbum.dammyr.net//api/shop/list", function( data ) {
+			parentThis.items = data;
+			done(data);
+		});
 	}
 	
 	
 	// ADD-METHOD
 	this.add = function(item, done){
+		$("#shoplist").addClass("loading");
 		console.log("Vi legger til: ", item);
-			
+		
 		var senddata = {
 			"name"		: item,
 			"owner"		: 0,
 			"shopped"	: "false"
 		}
 		var input = {"items": senddata}
-		$(".list-group").append(template(input));
+		//$(".list-group").append(template(input));
 		done();
+		
 		$.ajax({
-		  url: "http://comalbum.dammyr.net/api/shop/",
-		  contentType: "application/json",
-		  data: JSON.stringify(senddata),
-		  type: 'POST'
+			url: "http://comalbum.dammyr.net/api/shop/",
+			contentType: "application/json",
+			data: JSON.stringify(senddata),
+			type: 'POST'
 		}).done(function(response) {
-		  console.log(response[0]);
-			
+			console.log("Response fra ADD i API:",response[0]);
+			parentThis.items.push(response[0]);
+			var input = {"items": response[0]}
+			$(".list-group").append(template(input));
 		}).fail(function(err){
 			console.warn(err);	
 		});
@@ -73,7 +85,7 @@ function shoplist () {
 		  url: "http://comalbum.dammyr.net/api/shop/"+shopitem.id,
 		  type: 'DELETE'
 		}).done(function(response) {
-		  console.log(response);	
+		  console.log("Response fra DELETE i API:",response);	
 		}).fail(function(err){
 			console.warn(err);	
 		});
@@ -95,13 +107,18 @@ $('document').ready(function(){
 		
 		var list = document.getElementById("list-group");
 		new SwipeOut(list);
-		
+		/*
 		$(".list-group-item").on("delete", function(evt) {
 			console.log(this);
   			mylist.remove(this);
 		});
+		*/
+		$("#shoplist").on("delete",".list-group-item", function(evt) {
+			console.log("Vi bobla!");
+			mylist.remove(this);
+		});
 
-		console.log(mylist.owner);
+		mylist.load();
 	});
 	// Make new list
 		//Get items
@@ -114,9 +131,11 @@ $('#shopadd').click(function(){
 	
 	var shopitem = $('#shopitem').val();
 	mylist.add(shopitem, function(){
+		/*
 		$('.del-button').click(function(){
 			shopdelete(this);		
 		});	
+		*/
 	});
 	
 });
