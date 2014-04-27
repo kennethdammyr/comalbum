@@ -4,18 +4,34 @@
   
 
 function shoplist () {
+	
+	this.items;
+	this.owner = "Owner not yet implemented";
+	
 	// SHOW-METHOD
 	this.show = function(done){
 		console.log("Vi lister din handleliste");
+		$("#shoplist").addClass("loading");
+		
 		$.getJSON( "http://comalbum.dammyr.net//api/shop/list", function( data ) {
+			$("#shoplist").removeClass("loading");
 			var input = {"items": data}
 			$(".list-group").html(template(input));
 			  $.each( data, function( key, val ) {
-				console.log(val);
-				  
+				items = val;
 			  });
 			done();
+			
 			});
+	}
+	
+	// RELOAD-METHOD
+	this.reload = function(done){
+		console.log("Vi reloader aktiv liste");	
+		
+		
+		
+		//done();
 	}
 	
 	
@@ -85,7 +101,7 @@ $('document').ready(function(){
   			mylist.remove(this);
 		});
 
-		
+		console.log(mylist.owner);
 	});
 	// Make new list
 		//Get items
