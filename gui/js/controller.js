@@ -9,6 +9,17 @@ function shoplist () {
 	this.items;
 	this.owner = "Owner not yet implemented";
 	
+	
+	// LOAD-METHOD
+	this.load = function(listID,done){
+		console.log("Vi loader liste");	
+		
+		$.getJSON( "http://comalbum.dammyr.net//api/shop/list", function( data ) {
+			parentThis.items = data;
+			done(data);
+		});
+	}
+	
 	// SHOW-METHOD
 	this.show = function(done){
 		console.log("Vi lister din handleliste");
@@ -28,18 +39,10 @@ function shoplist () {
 			$("#shoplist").removeClass("loading");
 			var input = {"items": items}
 			$(".list-group").html(template(input));
-			done();
+			var list = document.getElementById("list-group");
+			new SwipeOut(list);
+			//done();
 		})
-	}
-	
-	// LOAD-METHOD
-	this.load = function(listID,done){
-		console.log("Vi loader liste");	
-		
-		$.getJSON( "http://comalbum.dammyr.net//api/shop/list", function( data ) {
-			parentThis.items = data;
-			done(data);
-		});
 	}
 	
 	
@@ -105,43 +108,60 @@ $('document').ready(function(){
 	
 	mylist.show(function(){
 		
-		var list = document.getElementById("list-group");
-		new SwipeOut(list);
-		/*
-		$(".list-group-item").on("delete", function(evt) {
-			console.log(this);
-  			mylist.remove(this);
-		});
-		*/
-		$("#shoplist").on("delete",".list-group-item", function(evt) {
-			console.log("Vi bobla!");
-			mylist.remove(this);
-		});
 
-		mylist.load();
 	});
+
+	
 	// Make new list
 		//Get items
 			// Fill the GUI
 			// Når nye ting legges til må vi ha en event eller tilsvarende som trigger oppdatering av lista... 
 
+	$("#shoplist").on("delete",".list-group-item", function(evt) {
+		console.log("Vi bobla!");
+		mylist.remove(this);
+	});
 
+	$('#shopadd').click(function(){
 
-$('#shopadd').click(function(){
-	
-	var shopitem = $('#shopitem').val();
-	mylist.add(shopitem, function(){
-		/*
-		$('.del-button').click(function(){
-			shopdelete(this);		
-		});	
-		*/
+		var shopitem = $('#shopitem').val();
+		mylist.add(shopitem, function(){
+
+		});
+
 	});
 	
-});
+	// Reload list on scroll to top
+	var scrollActive = false;
+	$( window ).scroll(function(e){
+		
+		$("#shoplist").addClass("loading");
+		if ($(window).scrollTop() < -20) {
+			//console.log("vi scroller -20", scrollActive);
+			if (!scrollActive){
+				scrollActive = true;
+				//console.log("klare!", scrollActive);
+				
+				mylist.load(0,function(items){
+					$("#shoplist").removeClass("loading");
+					var input = {"items": items}
+					$(".list-group").html(template(input));
+					
+					var list = document.getElementById("list-group");
+					new SwipeOut(list);
 
-$("#shopform").submit(function(event){
-	$("#shopitem").val('');
-	event.preventDefault();
-});	
+				});
+
+			}
+		} else if ($(window).scrollTop() >= 0) {
+			scrollActive = false;
+		}
+		
+		
+	});
+
+	$("#shopform").submit(function(event){
+		$("#shopitem").val('');
+		event.preventDefault();
+	});	
 });

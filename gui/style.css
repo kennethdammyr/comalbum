@@ -26,8 +26,9 @@ body {
 .loading {
 	background-image: url(img/ajax-loader.gif);
 	background-repeat: no-repeat;
-	background-position: center;
+	background-position: center top;
 	margin: 0 auto;
+	padding-top: 40px;
 }
 
 .list-group-item {
